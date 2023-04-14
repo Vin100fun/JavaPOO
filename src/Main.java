@@ -1,8 +1,8 @@
-import javax.swing.filechooser.FileView;
+import Classes.*;
+
 import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 
 public class Main {
     static String chaine = "abcdefghijklmnopqrstuvwxyz";
@@ -10,6 +10,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         int nRet = 0;
         Scanner clavier = new Scanner(System.in);
+
         while (nRet != -1) {
             System.out.println("Quelle fonction tester ? :");
             System.out.println("1- Renverser une chaine");
@@ -20,6 +21,9 @@ public class Main {
             System.out.println("6- Compter les mots dans une phrase");
             System.out.println("7- Sauvegarder une entrée dans un fichier");
             System.out.println("8- Compter le nombre de mots dans un fichier");
+            System.out.println("9- Pour tester l'implémentation des classes");
+            System.out.println("10- Pour tester l'implémentation des Singleton");
+            System.out.println("11- Pour tester la Serialisation puis DéSerialisation");
             System.out.println("-1 Pour quitter");
             nRet = inputNumber();
             switch (nRet) {
@@ -50,27 +54,51 @@ public class Main {
                     String phrase = clavier.nextLine();
                     System.out.println("Dans quel fichier l'enregister ? :");
                     String nomFichier = clavier.nextLine();
-                    savetoTXT(phrase,nomFichier);
+                    savetoTXT(phrase, nomFichier);
                     break;
-                case 8 :
+                case 8:
                     ReadFileAndSumWords();
                     break;
+                case 9:
+                    testClasses();
+                    break;
+                case 10:
+                    testSingleton();
+                    break;
+                case 11:
+                    Utilisateur utilisateur = new Utilisateur("Vincent", "EVIEUX", "VEVIEUX", "motdepasse", 25);
+                    testSerializableOutput(utilisateur, "utilisateur.ser");
+                    System.out.println("Réinitialisation de l'objet avant dé-sérialisation");
+                    System.out.println(utilisateur.getPrenom());
+                    System.out.println(utilisateur.getMotdepasse());
+                    System.out.println(utilisateur.getNom());
+                    System.out.println(utilisateur.getAge());
+                    System.out.println(utilisateur.getLogin());
+                    utilisateur = new Utilisateur(null, null, null, null, 0);
+                    utilisateur = testDeSerializableUtilisateur("utilisateur.ser");
+                    System.out.println("Objet lu après dé-sérialisation");
+                    System.out.println(utilisateur.getPrenom());
+                    System.out.println(utilisateur.getMotdepasse());
+                    System.out.println(utilisateur.getNom());
+                    System.out.println(utilisateur.getAge());
+                    System.out.println(utilisateur.getLogin());
+                    break;
             }
-
             System.out.println("Appuyer sur une touche pour continuer");
             clavier.nextLine();
-
         }
-
-
     }
 
+    /**
+     * Demande une chaine à l'utilisateur pour la renverser caractère par caractère
+     */
     private static void reverseChaine() {
-        System.out.println("Entrez une chaine :");
-        Scanner clavier = new Scanner(System.in);
-        String chaine = clavier.next();
         int longueur = chaine.length();
         String chaineReverse = "";
+        Scanner clavier = new Scanner(System.in);
+        String chaine = clavier.next();
+
+        System.out.println("Entrez une chaine :");
         for (int i = longueur - 1; i >= 0; i--) {
             chaineReverse += chaine.charAt(i);
         }
@@ -79,6 +107,10 @@ public class Main {
 
     }
 
+    /**
+     * Demande une chaine de caractère à l'utilisateur et en fait une pyramide
+     * Attention : Si la chaine est pair, la pyramide s'arrête à longueur(chaine) -1
+     */
     private static void pyramideChaine() {
         System.out.println("Entrez une chaine :");
         Scanner clavier = new Scanner(System.in);
@@ -97,11 +129,22 @@ public class Main {
         }
     }
 
+    /**
+     * A partir d'un entier donné par l'utilisateur,
+     * utilise la formule mathématique pour
+     * donner la somme des entiers
+     * compris entre 1 et l'entier donné
+     */
     private static void sumNumber() {
         int number = inputNumber();
         System.out.println((number + 1) * (number / 2));
     }
 
+    /**
+     * Pour un entier donné par l'utilisateur,
+     * vérifie dans un premier temps s'il est pair.
+     * Puis, s'il n'est pas premier, c'est qu'il est impair.
+     */
     private static void isPremier() {
         boolean fPremier = true;
         int monEntier = inputNumber();
@@ -123,6 +166,12 @@ public class Main {
         }
     }
 
+    /**
+     * Le jeu du "c'est plus c'est moins".
+     * A partir d'un nombre entre 1 et 1000 compris,
+     * le joueur doit trouver le nombre avec comme indication que ce dernier est supérieur
+     * ou inférieur au nombre donné. Se termine avec le bon nombre.
+     */
     private static void searchNumber() {
         int nRet = 0;
         int compte = 0;
@@ -142,6 +191,10 @@ public class Main {
         System.out.println("Félicitation vous avez trouvé le nombre en " + compte + " coup(s)");
     }
 
+    /**
+     * Fonction technique permettant de vérifier si la chaine rentrée
+     * par l'utilisateur est un chiffre ou nombre uniquement.     *
+     */
     public static int inputNumber() {
         int nRet = 0;
         boolean fRet = true;
@@ -150,7 +203,7 @@ public class Main {
         while (fRet) {
             try {
                 nRet = clavier.nextInt();
-            } catch (Exception InputMismatchException) {
+            } catch (Exception e) {
                 System.out.println("Veuillez rentrer un nombre");
             } finally {
                 fRet = false;
@@ -159,6 +212,11 @@ public class Main {
         return nRet;
     }
 
+    /**
+     * Pour une phrase séparée par des espaces (" ")
+     * la fonction sépare cette dernière puis somme
+     * le nombre de séparations créées.
+     */
     private static int sumWords(String phrase) {
 
 
@@ -169,16 +227,19 @@ public class Main {
         //System.out.println("Le nombre de mots dans la phrase est : " + nombreDeMots);
     }
 
-    private static void savetoTXT(String phrase,String nomFichier) {
-
-
+    /**
+     * Pour une phrase donnée en paramètre la fonction
+     * sauvegarde cette phrase dans le fichier nommé en paramètre.
+     * Le créé si besoin.
+     */
+    private static void savetoTXT(String phrase, String nomFichier) {
         File fichier = new File(nomFichier);
 
         try {
             if (!fichier.exists()) {
                 fichier.createNewFile();
             }
-            FileWriter writer = new FileWriter(fichier,true);
+            FileWriter writer = new FileWriter(fichier, true);
             writer.write(phrase);
             writer.write("\n");
             writer.close();
@@ -189,6 +250,11 @@ public class Main {
         }
     }
 
+    /**
+     * A partir d'un fichier donné par l'utilisateur,
+     * ouvre le fichier et comptes le nombre de mots présent.
+     * Se ferme avec un retour d'erreur si le fichier n'existe pas
+     */
     private static void ReadFileAndSumWords() throws FileNotFoundException {
         Scanner clavier = new Scanner(System.in);
         System.out.println("Indiquez le fichier dans lequel il faut compter les mots :");
@@ -214,4 +280,108 @@ public class Main {
         }
 
     }
+
+    /**
+     * Fonction permettant de tester les get/set des classes
+     * ainsi que quelques méthodes implémentées si présentes
+     */
+    private static void testClasses() {
+        Voiture voiture = new Voiture("Peugeot 2008", 35000, 110, "Bleu");
+        voiture.getDesignation();
+        System.out.println("Test voiture :");
+        System.out.println(voiture.getPrixHT());
+        System.out.println(voiture.getPrixAvecTaxes(0.2));
+        System.out.println("----------------");
+        Rectangle rectangle = new Rectangle(4, 2);
+        System.out.println("Test rectangle :");
+        System.out.println(rectangle.getLargeur());
+        System.out.println(rectangle.getLongueur());
+        rectangle.display();
+        System.out.println("----------------");
+        Utilisateur utilisateur = new Utilisateur("Vincent", "EVIEUX", "VEVIEUX", "motdepasse", 25);
+        System.out.println("Test utilisateur");
+        System.out.println(utilisateur.getLogin());
+        System.out.println(utilisateur.getNom());
+        System.out.println(utilisateur.getPrenom());
+        System.out.println(utilisateur.getAge());
+        System.out.println("----------------");
+        Square square = new Square(3);
+        System.out.println("Test Square");
+        System.out.println(square.getLargeur());
+        System.out.println(square.getLongueur());
+        System.out.println(square.calculAire());
+        square.display();
+        System.out.println("----------------");
+
+    }
+
+    /**
+     * La fonction teste si les singletons sont correctement implémentés
+     */
+    private static void testSingleton() {
+        SingleObject object = SingleObject.getInstance();
+        SingleObject object2 = SingleObject.getInstance();
+        SingleObject object3 = SingleObject.getInstance();
+
+        System.out.println(object);
+        System.out.println(object2);
+        System.out.println(object3);
+
+    }
+
+    /**
+     * Serialise un objet passé en paramètre dans le fichier donné en paramètre
+     * Créé le fichier si nécessaire.
+     */
+    private static void testSerializableOutput(Object objet, String nomFichier) {
+        ObjectOutputStream oos = null;
+        try {
+            final FileOutputStream fichier = new FileOutputStream(nomFichier);
+            oos = new ObjectOutputStream(fichier);
+            oos.writeObject(objet);
+            System.out.println("Ecriture de l'object dans le fichier : " + nomFichier);
+            oos.flush();
+        } catch (final java.io.IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (oos != null) {
+                    oos.flush();
+                    oos.close();
+                }
+            } catch (final IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * À partir du nom de fichier donné, désérialise l'utilisateur contenu
+     * et le renvoi
+     */
+    private static Utilisateur testDeSerializableUtilisateur(String nomFichier) {
+        ObjectInputStream ois = null;
+        Utilisateur utilisateur = null;
+        try {
+            final FileInputStream fichier = new FileInputStream(nomFichier);
+            ois = new ObjectInputStream(fichier);
+            utilisateur = (Utilisateur) ois.readObject();
+
+        } catch (final java.io.IOException e) {
+            e.printStackTrace();
+        } catch (final ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ois != null) {
+                    ois.close();
+                }
+            } catch (final IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return utilisateur;
+    }
+
+
 }
