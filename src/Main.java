@@ -4,8 +4,14 @@ import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * Limite et axes d'améliorations :
+ * - Les tests peuvent être automatisés en java
+ * - Ces mêmes tests pourraient couvrir plus de cas
+ * - Avec Github un pipeline d'intégration continue est envisageable
+ * - Les fonctions sont implémentés et testés, mais ne servent pas en tant que tel
+ */
 public class Main {
-    static String chaine = "abcdefghijklmnopqrstuvwxyz";
 
     public static void main(String[] args) throws IOException {
         int nRet = 0;
@@ -67,7 +73,7 @@ public class Main {
                     break;
                 case 11:
                     Utilisateur utilisateur = new Utilisateur("Vincent", "EVIEUX", "VEVIEUX", "motdepasse", 25);
-                    testSerializableOutput(utilisateur, "utilisateur.ser");
+                    testSerializableUtilisateur(utilisateur, "utilisateur.ser");
                     System.out.println("Réinitialisation de l'objet avant dé-sérialisation");
                     System.out.println(utilisateur.getPrenom());
                     System.out.println(utilisateur.getMotdepasse());
@@ -93,12 +99,13 @@ public class Main {
      * Demande une chaine à l'utilisateur pour la renverser caractère par caractère
      */
     private static void reverseChaine() {
-        int longueur = chaine.length();
+        System.out.println("Entrez une chaine :");
         String chaineReverse = "";
         Scanner clavier = new Scanner(System.in);
         String chaine = clavier.next();
+        int longueur = chaine.length();
 
-        System.out.println("Entrez une chaine :");
+        //Renversement de la chaine
         for (int i = longueur - 1; i >= 0; i--) {
             chaineReverse += chaine.charAt(i);
         }
@@ -109,18 +116,21 @@ public class Main {
 
     /**
      * Demande une chaine de caractère à l'utilisateur et en fait une pyramide
-     * Attention : Si la chaine est pair, la pyramide s'arrête à longueur(chaine) -1
+     * Attention : Si la chaine est paire, la pyramide s'arrête à longueur(chaine) -1
      */
     private static void pyramideChaine() {
         System.out.println("Entrez une chaine :");
         Scanner clavier = new Scanner(System.in);
         String chaine = clavier.next();
         int espace = chaine.length() / 2;
+        //Boucle pour le nombre de lignes
         for (int i = 1; i < chaine.length(); i = i + 2) {
             String sRet = "";
+            //Boucle pour le d'espace pour centrer la pyramide
             for (int k = 0; k < espace; k++) {
                 sRet += " ";
             }
+            //Boucle pour le nombre de caractères par ligne
             for (int j = 0; j < i; j++) {
                 sRet += chaine.charAt(j);
             }
@@ -137,6 +147,7 @@ public class Main {
      */
     private static void sumNumber() {
         int number = inputNumber();
+        //Formule mathématique de la somme d'entier de 1 à number
         System.out.println((number + 1) * (number / 2));
     }
 
@@ -149,8 +160,11 @@ public class Main {
         boolean fPremier = true;
         int monEntier = inputNumber();
         double nRet = monEntier % 2;
+        //Si nRet n'est pas pair :
         if (nRet != 0) {
             for (int i = 3; i < monEntier - 1; i++) {
+                //Si le nombre en entrée est divisible, par autre chose que 1 et lui
+                // même il n'est pas premier
                 if (monEntier % i == 0) {
                     fPremier = false;
                     break;
@@ -177,8 +191,9 @@ public class Main {
         int compte = 0;
         System.out.println("Le nombre est entre 1 et 1000 comprit");
         double monEntier = inputNumber();
+        //nTrouve est choisi au hasard entre [1;1000]
         double nTrouve = new Random().nextInt(1000) + 1;
-
+        //Tant que le nombre en entrée terminal n'est pas le nombre choisi au hasard
         while (nTrouve != monEntier) {
             compte += 1;
             if (nTrouve / monEntier > 1.0) {
@@ -193,7 +208,8 @@ public class Main {
 
     /**
      * Fonction technique permettant de vérifier si la chaine rentrée
-     * par l'utilisateur est un chiffre ou nombre uniquement.     *
+     * par l'utilisateur est un chiffre ou nombre uniquement.
+     * Ne présente donc peu d'intérêt pour le module en cours
      */
     public static int inputNumber() {
         int nRet = 0;
@@ -333,7 +349,7 @@ public class Main {
      * Serialise un objet passé en paramètre dans le fichier donné en paramètre
      * Créé le fichier si nécessaire.
      */
-    private static void testSerializableOutput(Object objet, String nomFichier) {
+    private static void testSerializableUtilisateur(Object objet, String nomFichier) {
         ObjectOutputStream oos = null;
         try {
             final FileOutputStream fichier = new FileOutputStream(nomFichier);
@@ -382,6 +398,4 @@ public class Main {
         }
         return utilisateur;
     }
-
-
 }
