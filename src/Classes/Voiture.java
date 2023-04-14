@@ -49,7 +49,7 @@ public class Voiture {
     }
 
     public double getPrixAvecTaxes(double taxes) {
-        return prixHT*taxes;
+        return prixHT*(1+taxes);
     }
 
 }

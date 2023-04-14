@@ -1,11 +1,21 @@
 package Classes;
 
-public class Utilisateur {
+import java.io.Serializable;
+
+public class Utilisateur implements Serializable {
     private String prenom;
     private String nom;
     private String login;
     private String motdepasse;
     private int age;
+
+    public Utilisateur(String prenom, String nom, String login, String motdepasse, int age) {
+        this.prenom = prenom;
+        this.nom = nom;
+        this.login = login;
+        this.motdepasse = motdepasse;
+        this.age = age;
+    }
 
     public String getPrenom() {
         return prenom;
